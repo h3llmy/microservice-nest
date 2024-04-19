@@ -8,7 +8,7 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: './.env'
+      envFilePath: './.env',
     }),
   ],
   controllers: [AppController],
@@ -17,10 +17,10 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
     {
       provide: 'AUTH_SERVICE',
       useFactory: (configService: ConfigService) => {
-        const USER = configService.get('RABBITMQ_USER')
-        const PASSWORD = configService.get('RABBITMQ_PASS')
-        const HOST = configService.get('RABBITMQ_HOST')
-        const QUEUE = configService.get('RABBITMQ_AUTH_QUEUE')
+        const USER = configService.get('RABBITMQ_USER');
+        const PASSWORD = configService.get('RABBITMQ_PASS');
+        const HOST = configService.get('RABBITMQ_HOST');
+        const QUEUE = 'auth_queue';
 
         return ClientProxyFactory.create({
           transport: Transport.RMQ,
@@ -28,13 +28,13 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
             urls: [`amqp://${USER}:${PASSWORD}@${HOST}`],
             queue: QUEUE,
             queueOptions: {
-              durable: true
-            }
-          }
-        })
+              durable: true,
+            },
+          },
+        });
       },
-      inject: [ConfigService]
-    }
+      inject: [ConfigService],
+    },
   ],
 })
 export class AppModule {}

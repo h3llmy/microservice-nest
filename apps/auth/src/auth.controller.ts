@@ -1,20 +1,23 @@
 import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Ctx, MessagePattern, RmqContext } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @MessagePattern({ cmd: 'get-user' })
-  getUser(@Ctx() context: RmqContext) {
-    const channel = context.getChannelRef()
-    const message = context.getMessage()
+  @MessagePattern('get-user')
+  async getUser(@Payload() data: any) {
+    return this.authService.getUsers();
+  }
 
-    console.log(channel);
-    console.log(message);
-    channel.ack(message);
-    
-    return {user: "aselole"}
+  @EventPattern('create-user')
+  async handleCreateUser(@Payload() userData: any) {
+    try {
+      return await this.authService.createUsers(userData);
+      console.log('User created successfully:', userData);
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
   }
 }
