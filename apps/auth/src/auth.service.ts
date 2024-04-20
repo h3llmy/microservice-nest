@@ -14,8 +14,8 @@ export class AuthService {
     return this.userRepository.find();
   }
 
-  createUsers(data: any) {
-    const user = this.userRepository.create(data);
-    return this.userRepository.save(user);
+  async createUsers(data: any) {
+      const user = this.userRepository.create(data);
+      return await this.userRepository.save(user);
   }
 }

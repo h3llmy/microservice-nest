@@ -13,11 +13,6 @@ export class AuthController {
 
   @EventPattern('create-user')
   async handleCreateUser(@Payload() userData: any) {
-    try {
-      return await this.authService.createUsers(userData);
-      console.log('User created successfully:', userData);
-    } catch (error) {
-      console.error('Error creating user:', error);
-    }
+    return this.authService.createUsers(userData);
   }
 }
