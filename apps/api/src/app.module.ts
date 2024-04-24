@@ -17,8 +17,8 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
     {
       provide: 'AUTH_SERVICE',
       useFactory: (configService: ConfigService) => {
-        const USER = configService.get('RABBITMQ_USER');
-        const PASSWORD = configService.get('RABBITMQ_PASS');
+        const USER = configService.get('RABBITMQ_DEFAULT_USER');
+        const PASSWORD = configService.get('RABBITMQ_DEFAULT_PASS');
         const HOST = configService.get('RABBITMQ_HOST');
         const QUEUE = 'auth_queue';
 

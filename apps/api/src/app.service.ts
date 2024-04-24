@@ -11,11 +11,6 @@ export class AppService {
   }
 
   createUser(userData: RegisterDto) {
-    try {
-      const user = this.authService.send('create-user', userData);
-      return user;
-    } catch (error) {
-      return "aselole"
-    }
+    return this.authService.send('create-user', userData);
   }
 }

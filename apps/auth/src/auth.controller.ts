@@ -1,6 +1,11 @@
-import { Controller } from '@nestjs/common';
+import { BadRequestException, Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import {
+  EventPattern,
+  MessagePattern,
+  Payload,
+  RpcException,
+} from '@nestjs/microservices';
 import { RegisterDto } from './dto/register.dto';
 
 @Controller()
@@ -8,7 +13,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern('get-user')
-  async getUser(@Payload() data: any) {
+  async getUser() {
     return this.authService.getUsers();
   }
 
