@@ -48,7 +48,7 @@ services:
     container_name: nginx
     build:
       context: ./
-      dockerfile: ./apps/api/Dockerfile
+      dockerfile: ./nginx/Dockerfile
     ports:
       - '80:80'
     depends_on:
