@@ -9,6 +9,8 @@ services:
       - '15672:15672'
     env_file:
       - .env
+    networks:
+      - nginx_network
 
   postgres:
     image: postgres:14-alpine
@@ -19,6 +21,8 @@ services:
       - .env
     volumes:
       - /var/lib/postgresql/data
+    networks:
+      - nginx_network
 
   auth:
     container_name: auth-service
@@ -31,6 +35,8 @@ services:
       - postgres
       - rabbitmq
     command: npm run start:dev auth
+    networks:
+      - nginx_network
 
   api:
     container_name: api
@@ -42,6 +48,8 @@ services:
     env_file:
       - .env
     command: npm run start:dev api
+    networks:
+      - nginx_network
 
   nginx:
     image: nginx
