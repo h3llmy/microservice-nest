@@ -56,3 +56,9 @@ services:
     depends_on:
       - auth
       - api
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    external: true
