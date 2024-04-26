@@ -44,13 +44,11 @@ services:
     command: npm run start:dev api
 
   nginx:
-    image: nginx
+    image: nginx:latest
     container_name: nginx
-    build:
-      context: ./
-      dockerfile: ./nginx/Dockerfile
     ports:
-      - '80:80'
+      - 8000:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
-      - auth
       - api
