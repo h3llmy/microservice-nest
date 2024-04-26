@@ -9,8 +9,6 @@ export class QueryErrorFilter extends BaseRpcExceptionFilter {
   public catch(exception: any, host: ArgumentsHost): any {
     const detail = exception.detail;
     if (typeof detail === 'string' && detail.includes('already exists')) {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-
       const messageStart = exception.table.split('_').join(' ') + ' with';
       //   throw new BadRequestException(
       //     exception.detail.replace('Key', messageStart),
