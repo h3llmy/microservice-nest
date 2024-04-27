@@ -1,11 +1,6 @@
-import { BadRequestException, Controller } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import {
-  EventPattern,
-  MessagePattern,
-  Payload,
-  RpcException,
-} from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { RegisterDto } from './dto/register.dto';
 
 @Controller()

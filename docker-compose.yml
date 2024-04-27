@@ -1,5 +1,8 @@
 version: '3'
 
+networks:
+  microservice_network:
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -9,6 +12,8 @@ services:
       - '15672:15672'
     env_file:
       - .env
+    networks:
+      - microservice_network
 
   postgres:
     image: postgres:14-alpine
@@ -19,6 +24,8 @@ services:
       - .env
     volumes:
       - /var/lib/postgresql/data
+    networks:
+      - microservice_network
 
   auth:
     container_name: auth-service
@@ -31,17 +38,19 @@ services:
       - postgres
       - rabbitmq
     command: npm run start:dev auth
+    networks:
+      - microservice_network
 
   api:
     container_name: api
     build:
       context: ./
       dockerfile: ./apps/api/Dockerfile
-    ports:
-      - '4000:4000'
     env_file:
       - .env
     command: npm run start:dev api
+    networks:
+      - microservice_network
 
   nginx:
     image: nginx:latest
@@ -52,3 +61,5 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
     depends_on:
       - api
+    networks:
+      - microservice_network
