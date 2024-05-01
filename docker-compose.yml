@@ -31,7 +31,7 @@ services:
     container_name: auth-service
     build:
       context: ./
-      dockerfile: ./apps/auth/Dockerfile.prod
+      dockerfile: ./apps/auth/Dockerfile
     env_file:
       - .env
     depends_on:
@@ -45,7 +45,7 @@ services:
     container_name: api
     build:
       context: ./
-      dockerfile: ./apps/api/Dockerfile.prod
+      dockerfile: ./apps/api/Dockerfile
     env_file:
       - .env
     command: node dist/api/main.js
