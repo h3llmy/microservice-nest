@@ -1,11 +1,21 @@
-FROM node
-
+# Build stage 1
+FROM node:18-alpine as builder
 WORKDIR /usr/src/app
-
-COPY package*.json .
-
+COPY package*.json ./
 RUN npm install
 
-EXPOSE 4000
-
+# Build stage 2
+FROM builder as build
+WORKDIR /usr/src/app
+COPY tsconfig*.json ./
 COPY . .
+RUN npm run build api
+
+# Production stage
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/package*.json ./
+RUN npm install --only=production
+COPY --from=build ./usr/src/app/dist/apps/api ./dist/api
+
+EXPOSE 4000

@@ -31,13 +31,13 @@ services:
     container_name: auth-service
     build:
       context: ./
-      dockerfile: ./apps/auth/Dockerfile
+      dockerfile: ./apps/auth/Dockerfile.prod
     env_file:
       - .env
     depends_on:
       - postgres
       - rabbitmq
-    command: npm run start:dev auth
+    command: node dist/auth/main.js
     networks:
       - microservice_network
 
@@ -45,10 +45,10 @@ services:
     container_name: api
     build:
       context: ./
-      dockerfile: ./apps/api/Dockerfile
+      dockerfile: ./apps/api/Dockerfile.prod
     env_file:
       - .env
-    command: npm run start:dev api
+    command: node dist/api/main.js
     networks:
       - microservice_network
 
