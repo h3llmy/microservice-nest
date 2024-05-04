@@ -16,13 +16,13 @@ export class AuthService {
   }
 
   async createUsers(data: Partial<User>) {
-    try {
-      const user = this.userRepository.create(data);
-      return await this.userRepository.save(user);
-    } catch (error) {
-      if (error instanceof QueryFailedError) {
-        throw new RpcException({ status: 400, message: 'user already exist' });
-      }
+    const checkUser = await this.userRepository.findOne({
+      where: [{ username: data.username }, { email: data.email }],
+    });
+    if (checkUser) {
+      throw new RpcException({ status: 400, message: 'user already exist' });
     }
+    const user = this.userRepository.create(data);
+    return await this.userRepository.save(user);
   }
 }

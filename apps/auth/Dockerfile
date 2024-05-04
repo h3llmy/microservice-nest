@@ -17,3 +17,5 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/package*.json ./
 RUN npm install --only=production
 COPY --from=build ./usr/src/app/dist/apps/auth ./dist/auth
+
+CMD ["node", "dist/auth/main.js"] 

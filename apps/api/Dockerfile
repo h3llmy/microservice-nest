@@ -19,3 +19,5 @@ RUN npm install --only=production
 COPY --from=build ./usr/src/app/dist/apps/api ./dist/api
 
 EXPOSE 4000
+
+CMD ["node", "dist/api/main.js"] 
