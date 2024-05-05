@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
+import { EncryptionModule } from '@app/encryption';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { User } from './entities/user.entity';
         database: configService.get<string>('POSTGRES_DB', 'nest_auth'),
         autoLoadEntities: true,
         synchronize: configService.get<boolean>('RUN_MIGRATIONS', true),
+        logging: true,
       }),
     }),
     TypeOrmModule.forFeature([User]),

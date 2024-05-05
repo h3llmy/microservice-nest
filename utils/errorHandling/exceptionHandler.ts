@@ -11,7 +11,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : exception['status'];
 
-    response.status(status || 500).json({
+    response.status(typeof status === 'number' ? status : 500).json({
       message: exception['message'],
     });
   }

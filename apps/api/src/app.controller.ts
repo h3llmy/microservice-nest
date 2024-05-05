@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { RegisterDto } from './dto/createUser.dto';
 
@@ -7,8 +15,12 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getUser() {
-    return this.appService.getUser();
+  getUser(
+    @Query('page', new ParseIntPipe({ optional: true })) page: number,
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number,
+    @Query('search') search: string,
+  ) {
+    return this.appService.getUser(page, limit, search);
   }
 
   @Post()

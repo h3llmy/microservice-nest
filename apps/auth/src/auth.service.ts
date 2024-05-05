@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { RpcException } from '@nestjs/microservices';
 
@@ -11,8 +11,29 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  getUsers() {
-    return this.userRepository.find();
+  async getUsers(limit = 10, page = 1, search?: string) {
+    const skip = (page - 1) * limit;
+    const query: any = {};
+    if (search) {
+      query.where = [
+        { username: Like(`%${search}%`) },
+        { email: Like(`%${search}%`) },
+        { role: Like(`%${search}%`) },
+      ];
+    }
+
+    const [list, totalData] = await Promise.all([
+      this.userRepository.find({
+        ...query,
+        take: limit,
+        skip: skip,
+      }),
+      this.userRepository.count(query),
+    ]);
+
+    const totalPages = Math.ceil(totalData / limit);
+
+    return { currentPage: page, totalPages, totalData, list };
   }
 
   async createUsers(data: Partial<User>) {
@@ -22,7 +43,10 @@ export class AuthService {
     if (checkUser) {
       throw new RpcException({ status: 400, message: 'user already exist' });
     }
-    const user = this.userRepository.create(data);
-    return await this.userRepository.save(user);
+
+    const userData = this.userRepository.create(data);
+    const newUser = await this.userRepository.save(userData);
+    delete newUser.password;
+    return newUser;
   }
 }

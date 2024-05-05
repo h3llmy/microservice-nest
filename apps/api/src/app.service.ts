@@ -6,11 +6,11 @@ import { RegisterDto } from './dto/createUser.dto';
 export class AppService {
   constructor(@Inject('AUTH_SERVICE') private authService: ClientProxy) {}
 
-  getUser() {
-    return this.authService.send('get-user', {});
+  getUser(page?: number, limit?: number, search?: string) {
+    return this.authService.send({ cmd: 'get-user' }, { page, limit, search });
   }
 
   createUser(userData: RegisterDto) {
-    return this.authService.send('create-user', userData);
+    return this.authService.send({ cmd: 'create-user' }, userData);
   }
 }
